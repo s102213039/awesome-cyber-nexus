@@ -11,6 +11,7 @@ export default function NetworkVisualizer() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationId;
+    const timeouts = [];
 
     // Set canvas dimensions
     const resizeCanvas = () => {
@@ -99,7 +100,7 @@ export default function NetworkVisualizer() {
         const { id, delay } = queue.shift();
         const current = particles.find(p => p.id === id);
 
-        setTimeout(() => {
+        const tId = setTimeout(() => {
           if (current) {
             current.state = targetState;
             current.transitionTimer = 1.0; // Glow flare timer
@@ -110,6 +111,7 @@ export default function NetworkVisualizer() {
             }
           }
         }, delay);
+        timeouts.push(tId);
 
         // Find neighbors
         particles.forEach(p => {
@@ -216,7 +218,12 @@ export default function NetworkVisualizer() {
       });
 
       // Update counters (throttled to avoid render loops)
-      setNetworkStats({ infected: infectedCount, healthy: healthyCount });
+      setNetworkStats(prev => {
+        if (prev.infected === infectedCount && prev.healthy === healthyCount) {
+          return prev;
+        }
+        return { infected: infectedCount, healthy: healthyCount };
+      });
 
       animationId = requestAnimationFrame(animate);
     };
@@ -229,6 +236,7 @@ export default function NetworkVisualizer() {
       canvas.removeEventListener('mouseleave', handleMouseLeave);
       canvas.removeEventListener('click', handleCanvasClick);
       cancelAnimationFrame(animationId);
+      timeouts.forEach(clearTimeout);
     };
   }, [toolMode]);
 

@@ -1,0 +1,17 @@
+diff --git a/src/App.jsx b/src/App.jsx
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -2,3 +2,3 @@
+-import CyberMesh from './components/CyberMesh';
++import ParticleCyberSpace from './components/ParticleCyberSpace';
+ import CyberTerminal from './components/CyberTerminal';
+@@ -53,2 +53,5 @@
+       <div className="crt-overlay" />
+       <div className="crt-scanlines" />
++
++      {/* Fullscreen 3D WebGL background */}
++      <ParticleCyberSpace />
+@@ -107,4 +110,0 @@
+-        {/* Waving terrain Canvas background */}
+-        <CyberMesh />
+-

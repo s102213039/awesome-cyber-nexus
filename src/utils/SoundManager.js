@@ -1,7 +1,7 @@
 class SoundManager {
   constructor() {
     this.ctx = null;
-    this.muted = false;
+    this.muted = true;
   }
 
   init() {

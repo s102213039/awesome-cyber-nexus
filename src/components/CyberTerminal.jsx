@@ -20,10 +20,24 @@ export default function CyberTerminal() {
   const [hackState, setHackState] = useState(null); // { secret: '', tries: 4 }
   const terminalEndRef = useRef(null);
   const canvasRef = useRef(null);
+  const inputRef = useRef(null);
+  const scanIntervalRef = useRef(null);
+
+  // Cleanup scan interval on unmount
+  useEffect(() => {
+    return () => {
+      if (scanIntervalRef.current) {
+        clearInterval(scanIntervalRef.current);
+      }
+    };
+  }, []);
 
   // Auto scroll
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = terminalEndRef.current?.parentElement?.parentElement;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, [history]);
 
   // Matrix falling letters canvas effect
@@ -100,7 +114,13 @@ export default function CyberTerminal() {
     }
 
     if (hackState) {
-      handleHackGuess(cmdStr.trim().toUpperCase());
+      const lowerCmd = cmdStr.trim().toLowerCase();
+      if (lowerCmd === 'exit' || lowerCmd === 'quit') {
+        setHackState(null);
+        addLine('DECRYPTION TERMINATED. CORE RESTORED.');
+      } else {
+        handleHackGuess(cmdStr.trim().toUpperCase());
+      }
       setInputValue('');
       return;
     }
@@ -169,7 +189,7 @@ export default function CyberTerminal() {
     let step = 0;
     const ports = [22, 80, 443, 8080, 3306];
     
-    const interval = setInterval(() => {
+    scanIntervalRef.current = setInterval(() => {
       if (step < ports.length) {
         const port = ports[step];
         const status = Math.random() < 0.65 ? 'OPEN' : 'FILTERED / RETRY';
@@ -177,7 +197,8 @@ export default function CyberTerminal() {
         soundManager.playScan();
         step++;
       } else {
-        clearInterval(interval);
+        clearInterval(scanIntervalRef.current);
+        scanIntervalRef.current = null;
         addLine(`SCAN PROTOCOL COMPLETION FOR ${ip}. SEC-OVERWATCH LEVEL: SECURE.`);
         setIsScanning(false);
         soundManager.playSuccess();
@@ -233,7 +254,7 @@ export default function CyberTerminal() {
   };
 
   return (
-    <div className="cyber-terminal-container" style={{ position: 'relative', border: '1px solid rgba(0, 240, 255, 0.15)', background: 'rgba(2, 6, 12, 0.85)', borderRadius: '4px', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+    <div className="cyber-terminal-container" onClick={() => inputRef.current?.focus()} style={{ position: 'relative', border: '1px solid rgba(0, 240, 255, 0.15)', background: 'rgba(2, 6, 12, 0.85)', borderRadius: '4px', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       
       {matrixActive && (
         <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, background: '#000', pointerEvents: 'none' }} />
@@ -262,6 +283,7 @@ export default function CyberTerminal() {
         <form onSubmit={(e) => { e.preventDefault(); handleCommand(inputValue); }} style={{ display: 'flex', alignItems: 'center', marginTop: '10px', borderTop: '1px solid rgba(0, 240, 255, 0.08)', paddingTop: '8px' }}>
           <span style={{ color: '#39ff14', marginRight: '6px', fontWeight: 'bold' }}>op@cyber-nexus:~#</span>
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}

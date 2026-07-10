@@ -1,0 +1,1 @@
+Verify the entire awesomeWeb project codebase. Ensure there are no hardcoded test results, dummy/facade implementations, or bypassed checks. Verify that the Three.js point cloud rendering, Web Audio API integration, CSS glitch art, and multi-theme switcher are genuinely and correctly implemented.
