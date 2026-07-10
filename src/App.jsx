@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import ThreatMap from './components/ThreatMap';
+import CyberMesh from './components/CyberMesh';
 import CyberTerminal from './components/CyberTerminal';
 import NetworkVisualizer from './components/NetworkVisualizer';
-import SystemMonitor from './components/SystemMonitor';
 import soundManager from './utils/SoundManager';
 
 const NEWS_TICKER_ITEMS = [
-  '>> [INTEGRITY] Mainframe firewall status stabilized at 94.2%...',
-  '>> [THREAT] Isolated DDoS vector targeted on Frankfurt nodes (BLOCKED)...',
-  '>> [SYSTEM] Operator authenticated. Credentials decrypted successfully...',
-  '>> [OVERWATCH] High threat SQL injection trace originating from Berlin Sector has been sanitized...',
-  '>> [NET] Node propagation speed optimized. Latency reduced to 4ms...',
-  '>> [ALERT] Quantum decryption buffer threshold reached 90% in backup sectors...'
+  '>> [SYSTEM] Synaptic Overdrive protocol initialized successfully...',
+  '>> [INTEGRITY] Consciousness Firewall active. Core security metrics: nominal...',
+  '>> [TECH] Quantum neural implants now available for batch integration...',
+  '>> [ALERT] Security mainframe firmware updated to version 9.42...'
 ];
 
 export default function App() {
   const [theme, setTheme] = useState('cyan');
   const [isMuted, setIsMuted] = useState(true);
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' or 'neural'
   const [tickerIndex, setTickerIndex] = useState(0);
 
-  // Initialize SoundManager with default mute state
+  // Initialize sounds on interaction
   useEffect(() => {
-    // SoundManager is muted by default until user interacts
     if (!isMuted) {
       soundManager.init();
       soundManager.playSuccess();
@@ -52,167 +47,172 @@ export default function App() {
     }
   };
 
+  const handleCtaClick = () => {
+    soundManager.playScan();
+    document.getElementById('specs-section').scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div className="app-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh', position: 'relative' }}>
-      
-      {/* CRT Overlay screensaver styling */}
+    <div style={{ position: 'relative', width: '100vw', background: 'var(--bg-dark)' }}>
+      {/* CRT screen filters */}
       <div className="crt-overlay" />
       <div className="crt-scanlines" />
 
-      {/* Header bar */}
-      <header style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        padding: '10px 20px', 
-        background: 'rgba(0, 10, 20, 0.85)', 
-        borderBottom: '2px solid var(--primary)',
-        boxShadow: '0 0 15px var(--primary-glow)',
-        zIndex: 50
+      {/* Decorative ambient glowing orbs */}
+      <div className="mesh-glow-orb" style={{ top: '10%', left: '5%', width: '400px', height: '400px' }} />
+      <div className="mesh-glow-orb" style={{ top: '60%', right: '5%', width: '500px', height: '500px', opacity: 0.5 }} />
+
+      {/* Sticky Blur Header */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '15px 5%',
+        background: 'rgba(2, 5, 10, 0.65)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+        zIndex: 100
       }}>
-        
-        {/* Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div className="glitch-text" style={{ 
-            fontFamily: '"Orbitron", sans-serif', 
-            fontSize: '18px', 
-            fontWeight: '900', 
-            color: 'var(--primary)',
-            letterSpacing: '2px'
-          }}>
-            CYBER-NEXUS // CSOC
-          </div>
-          <span style={{ 
-            fontSize: '9px', 
-            background: 'rgba(57, 255, 20, 0.15)', 
-            color: '#39ff14', 
-            padding: '2px 8px', 
-            borderRadius: '2px',
-            border: '1px solid rgba(57, 255, 20, 0.3)',
-            letterSpacing: '1px'
-          }}>
-            COGNITIVE CORE ONLINE
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '15px', color: 'var(--primary)', fontWeight: '900', letterSpacing: '2px', fontFamily: 'var(--font-title)' }}>
+            CYBER-NEXUS
           </span>
         </div>
 
-        {/* HUD control actions */}
+        {/* Navigation links */}
+        <nav style={{ display: 'flex', gap: '20px' }}>
+          <a href="#hero-section" onClick={() => soundManager.playHover()} style={{ color: 'var(--text-dim)', textDecoration: 'none', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Core</a>
+          <a href="#specs-section" onClick={() => soundManager.playHover()} style={{ color: 'var(--text-dim)', textDecoration: 'none', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Specs</a>
+          <a href="#terminal-section" onClick={() => soundManager.playHover()} style={{ color: 'var(--text-dim)', textDecoration: 'none', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Shell</a>
+          <a href="#neural-section" onClick={() => soundManager.playHover()} style={{ color: 'var(--text-dim)', textDecoration: 'none', fontSize: '12px', letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>Synapse</a>
+        </nav>
+
+        {/* Configurations */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          
-          {/* Tab selector */}
-          <div style={{ display: 'flex', background: 'rgba(0,0,0,0.4)', padding: '2px', borderRadius: '3px', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <button 
-              className="neon-btn"
-              onClick={() => { setActiveTab('dashboard'); soundManager.playClick(); }}
-              style={{ 
-                border: 'none', 
-                background: activeTab === 'dashboard' ? 'rgba(var(--primary-rgb), 0.15)' : 'transparent',
-                color: activeTab === 'dashboard' ? 'var(--primary)' : 'rgba(255,255,255,0.4)',
-                padding: '4px 10px',
-                fontSize: '10px'
-              }}
-            >
-              System Overview
-            </button>
-            <button 
-              className="neon-btn"
-              onClick={() => { setActiveTab('neural'); soundManager.playClick(); }}
-              style={{ 
-                border: 'none', 
-                background: activeTab === 'neural' ? 'rgba(var(--primary-rgb), 0.15)' : 'transparent',
-                color: activeTab === 'neural' ? 'var(--primary)' : 'rgba(255,255,255,0.4)',
-                padding: '4px 10px',
-                fontSize: '10px'
-              }}
-            >
-              Neural Core
-            </button>
-          </div>
-
-          {/* Theme selection panel */}
+          {/* Theme switcher */}
           <div style={{ display: 'flex', gap: '6px' }}>
-            <div 
-              onClick={() => changeTheme('cyan')} 
-              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#00f0ff', cursor: 'pointer', border: theme === 'cyan' ? '2px solid #fff' : 'none' }}
-              title="Cyan Cyber"
-            />
-            <div 
-              onClick={() => changeTheme('crimson')} 
-              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff0055', cursor: 'pointer', border: theme === 'crimson' ? '2px solid #fff' : 'none' }}
-              title="Crimson Threat"
-            />
-            <div 
-              onClick={() => changeTheme('acid')} 
-              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#39ff14', cursor: 'pointer', border: theme === 'acid' ? '2px solid #fff' : 'none' }}
-              title="Acid Matrix"
-            />
-            <div 
-              onClick={() => changeTheme('obsidian')} 
-              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#c5a059', cursor: 'pointer', border: theme === 'obsidian' ? '2px solid #fff' : 'none' }}
-              title="Obsidian Gold"
-            />
+            <div onClick={() => changeTheme('cyan')} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#00f0ff', cursor: 'pointer', border: theme === 'cyan' ? '2px solid #fff' : 'none' }} title="Cyan Cyber" />
+            <div onClick={() => changeTheme('crimson')} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff0055', cursor: 'pointer', border: theme === 'crimson' ? '2px solid #fff' : 'none' }} title="Crimson Threat" />
+            <div onClick={() => changeTheme('acid')} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#39ff14', cursor: 'pointer', border: theme === 'acid' ? '2px solid #fff' : 'none' }} title="Acid Matrix" />
+            <div onClick={() => changeTheme('obsidian')} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#c5a059', cursor: 'pointer', border: theme === 'obsidian' ? '2px solid #fff' : 'none' }} title="Obsidian Gold" />
           </div>
 
-          {/* Audio controller button */}
-          <button 
-            className="neon-btn"
-            onClick={handleMuteToggle}
-            style={{ 
-              borderColor: isMuted ? 'rgba(255,255,255,0.2)' : 'var(--primary)',
-              color: isMuted ? 'rgba(255,255,255,0.4)' : 'var(--primary)'
-            }}
-          >
-            {isMuted ? '🔊 SOUND: MUTED' : '🔊 SOUND: ACTIVE'}
+          {/* Sound controller */}
+          <button className="neon-btn" onClick={handleMuteToggle} style={{ fontSize: '10px', padding: '4px 10px' }}>
+            {isMuted ? '🔊 SOUND: OFF' : '🔊 SOUND: ON'}
           </button>
         </div>
-
       </header>
 
-      {/* Main dashboard content panel */}
-      <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
-        {activeTab === 'dashboard' ? (
-          <div className="dashboard-grid">
-            
-            {/* Sector A: Threat simulation globe */}
-            <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column' }}>
-              <ThreatMap />
-            </div>
+      {/* SECTION 1: HERO */}
+      <section id="hero-section" style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', textAlign: 'center', zIndex: 10 }}>
+        {/* Waving terrain Canvas background */}
+        <CyberMesh />
 
-            {/* Sector B: Terminal shell console */}
-            <div>
-              <CyberTerminal />
-            </div>
-
-            {/* Sector C: System core details monitor */}
-            <div>
-              <SystemMonitor />
-            </div>
-
+        <div style={{ zIndex: 10, maxWidth: '800px', padding: '0 20px' }}>
+          <div className="psy-subtitle">Neuromorphic Integration Protocol</div>
+          <h1 className="psy-title" style={{ fontSize: '4rem', textShadow: '0 0 20px var(--primary-glow)' }}>
+            Elevate Your Consciousness
+          </h1>
+          <p style={{ color: 'var(--text-dim)', fontSize: '16px', marginBottom: '35px', maxWidth: '600px', margin: '0 auto 35px' }}>
+            Interfacing direct-to-cortex quantum augmentations. Forge virtual realities, lock down neural gateways, and synchronize your mind with the digital synapse net.
+          </p>
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
+            <button className="psy-btn" onClick={handleCtaClick}>Initialize Sync</button>
+            <a href="#specs-section" className="psy-btn-secondary" style={{ textDecoration: 'none', lineHeight: '1.6' }} onClick={() => soundManager.playHover()}>Explore Specs</a>
           </div>
-        ) : (
-          <div style={{ padding: '15px', height: 'calc(100vh - 100px)' }}>
+        </div>
+      </section>
+
+      {/* SECTION 2: SPECS CATALOG */}
+      <section id="specs-section" style={{ minHeight: '100vh', background: 'rgba(2, 5, 10, 0.95)', borderTop: '1px solid rgba(0,240,255,0.05)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', zIndex: 10 }}>
+          <div className="psy-subtitle">// COGNITIVE HARNESS HARDWARE</div>
+          <h2 className="psy-title" style={{ fontSize: '2.5rem', marginBottom: '10px' }}>Neural Augmentations</h2>
+          <p style={{ color: 'var(--text-dim)', fontSize: '14px', marginBottom: '40px' }}>
+            Browse state-of-the-art cyberware implants configured for cognitive operations.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '25px' }}>
+            {/* Card 1 */}
+            <div className="psy-card">
+              <div style={{ fontSize: '24px', marginBottom: '15px' }}>🧠</div>
+              <h3 style={{ fontFamily: 'var(--font-title)', fontSize: '18px', color: 'var(--primary)', marginBottom: '12px' }}>Cerebral Clock Overclocker</h3>
+              <p style={{ color: 'var(--text-dim)', fontSize: '13.5px' }}>
+                Accelerates synaptic connection speeds by 450%, enabling frame-by-frame situational decryption in high-stress digital operations.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="psy-card">
+              <div style={{ fontSize: '24px', marginBottom: '15px' }}>👁️</div>
+              <h3 style={{ fontFamily: 'var(--font-title)', fontSize: '18px', color: 'var(--primary)', marginBottom: '12px' }}>Ocular Sensory Matrix</h3>
+              <p style={{ color: 'var(--text-dim)', fontSize: '13.5px' }}>
+                Injects direct tactical HUD telemetry onto visual synapses. Supports real-time decryption codes, vector traces, and sub-channel data streams.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="psy-card">
+              <div style={{ fontSize: '24px', marginBottom: '15px' }}>🛡️</div>
+              <h3 style={{ fontFamily: 'var(--font-title)', fontSize: '18px', color: 'var(--primary)', marginBottom: '12px' }}>Synaptic Consciousness Firewall</h3>
+              <p style={{ color: 'var(--text-dim)', fontSize: '13.5px' }}>
+                Secures consciousness against invasive intrusion attacks. Employs quantum encryption protocols to shield neural nodes from memory manipulation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: CORE SHELL */}
+      <section id="terminal-section" style={{ minHeight: '100vh', background: 'rgba(2, 5, 10, 0.98)', borderTop: '1px solid rgba(0,240,255,0.05)' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', width: '100%', height: '520px', display: 'flex', flexDirection: 'column', zIndex: 10 }}>
+          <div className="psy-subtitle">// COGNITIVE MAINFRAME INTERFACES</div>
+          <h2 className="psy-title" style={{ fontSize: '2.5rem', marginBottom: '30px' }}>Nexus Command Deck</h2>
+          
+          <div style={{ flex: 1 }}>
+            <CyberTerminal />
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: NEURAL BRIDGE */}
+      <section id="neural-section" style={{ minHeight: '100vh', background: 'rgba(2, 5, 10, 0.95)', borderTop: '1px solid rgba(0,240,255,0.05)', paddingBottom: '120px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', height: '520px', display: 'flex', flexDirection: 'column', zIndex: 10 }}>
+          <div className="psy-subtitle">// SYNAPTIC STIMULATION BRIDGES</div>
+          <h2 className="psy-title" style={{ fontSize: '2.5rem', marginBottom: '30px' }}>Neural Net Overload</h2>
+          
+          <div style={{ flex: 1 }}>
             <NetworkVisualizer />
           </div>
-        )}
-      </main>
+        </div>
+      </section>
 
-      {/* Footer System Ticker bar */}
-      <footer style={{ 
-        height: '30px', 
-        background: 'rgba(0,5,10,0.95)', 
-        borderTop: '1px solid var(--primary-glow)',
-        display: 'flex', 
-        alignItems: 'center', 
-        padding: '0 20px',
-        zIndex: 50,
-        fontFamily: '"Share Tech Mono", monospace',
+      {/* Footer System Ticker */}
+      <footer style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '30px',
+        background: 'rgba(1, 3, 6, 0.98)',
+        borderTop: '1px solid rgba(0, 240, 255, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 5%',
+        zIndex: 100,
+        fontFamily: 'var(--font-mono)',
         fontSize: '11px'
       }}>
-        <div style={{ color: 'var(--primary)', textShadow: '0 0 4px var(--primary-glow)', width: '100%', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-          <span style={{ display: 'inline-block', animation: 'pulse 1.5s infinite', marginRight: '8px' }}>⚡</span>
+        <div style={{ color: 'var(--primary)', width: '100%', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+          <span style={{ display: 'inline-block', marginRight: '8px' }}>⚡ STATUS FEED:</span>
           {NEWS_TICKER_ITEMS[tickerIndex]}
         </div>
       </footer>
-
     </div>
   );
 }
