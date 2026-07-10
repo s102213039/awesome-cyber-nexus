@@ -1,0 +1,318 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap');
+
+/* Color Themes & Config */
+:root {
+  /* Cyan Cyber (Default Theme) */
+  --primary: #00f0ff;
+  --primary-glow: rgba(0, 240, 255, 0.4);
+  --primary-rgb: 0, 240, 255;
+  
+  --secondary: #bd00ff;
+  --secondary-glow: rgba(189, 0, 255, 0.3);
+  
+  --accent: #39ff14;
+  --accent-glow: rgba(57, 255, 20, 0.3);
+  
+  --bg-dark: #02060c;
+  --bg-card: rgba(4, 12, 24, 0.7);
+  --bg-card-border: rgba(0, 240, 255, 0.15);
+  --text-main: #e2f0fd;
+  --text-dim: #8ba8c5;
+}
+
+/* Theme overrides */
+[data-theme="crimson"] {
+  --primary: #ff0055;
+  --primary-glow: rgba(255, 0, 85, 0.4);
+  --primary-rgb: 255, 0, 85;
+  --secondary: #ff8800;
+  --secondary-glow: rgba(255, 136, 0, 0.3);
+  --accent: #00f0ff;
+  --accent-glow: rgba(0, 240, 255, 0.3);
+  --bg-dark: #0a0104;
+  --bg-card: rgba(18, 3, 9, 0.75);
+  --bg-card-border: rgba(255, 0, 85, 0.2);
+}
+
+[data-theme="acid"] {
+  --primary: #39ff14;
+  --primary-glow: rgba(57, 255, 20, 0.4);
+  --primary-rgb: 57, 255, 20;
+  --secondary: #00f0ff;
+  --secondary-glow: rgba(0, 240, 255, 0.3);
+  --accent: #ffff00;
+  --accent-glow: rgba(255, 255, 0, 0.3);
+  --bg-dark: #020801;
+  --bg-card: rgba(6, 16, 3, 0.75);
+  --bg-card-border: rgba(57, 255, 20, 0.2);
+}
+
+[data-theme="obsidian"] {
+  --primary: #c5a059;
+  --primary-glow: rgba(197, 160, 89, 0.3);
+  --primary-rgb: 197, 160, 89;
+  --secondary: #555555;
+  --secondary-glow: rgba(85, 85, 85, 0.3);
+  --accent: #ff4500;
+  --accent-glow: rgba(255, 69, 0, 0.3);
+  --bg-dark: #080808;
+  --bg-card: rgba(15, 15, 15, 0.85);
+  --bg-card-border: rgba(197, 160, 89, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Share Tech Mono', monospace;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* CRT Screen Warp and Flicker overlay */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, transparent 55%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.crt-overlay::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+  z-index: 10000;
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Scanline animation */
+.crt-scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10001;
+  animation: scanlineMove 12s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes scanlineMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* Glitch effects */
+.glitch-text {
+  position: relative;
+  text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+              -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+              0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  animation: glitch 1.5s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), -0.025em 0.05em 0 rgba(0, 255, 0, 0.75), 0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), -0.025em 0.05em 0 rgba(0, 255, 0, 0.75), 0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+}
+
+/* Glassmorphic Cyber Card Design */
+.cyber-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(var(--primary-rgb), 0.05);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cyber-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 25px rgba(var(--primary-rgb), 0.12), inset 0 0 12px rgba(var(--primary-rgb), 0.08);
+}
+
+/* Angle design lines for HUD card */
+.cyber-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid var(--primary);
+  border-left: 2px solid var(--primary);
+}
+
+.cyber-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid var(--primary);
+  border-right: 2px solid var(--primary);
+}
+
+/* Neon Text Glow helper classes */
+.glow-text {
+  color: var(--primary);
+  text-shadow: 0 0 5px var(--primary-glow), 0 0 10px var(--primary-glow);
+}
+
+.neon-btn {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 6px 12px;
+  font-family: 'Share Tech Mono', monospace;
+  cursor: pointer;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 5px rgba(var(--primary-rgb), 0.1);
+  text-shadow: 0 0 4px var(--primary-glow);
+}
+
+.neon-btn:hover {
+  background: var(--primary);
+  color: #000;
+  text-shadow: none;
+  box-shadow: 0 0 15px var(--primary);
+}
+
+.neon-btn:active {
+  transform: scale(0.98);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-rgb), 0.3);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Terminal Cursor */
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background-color: var(--primary);
+  margin-left: 4px;
+  animation: cursorBlink 0.8s steps(2, start) infinite;
+  box-shadow: 0 0 8px var(--primary);
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Scanning scanline widget cover */
+.scan-container {
+  position: relative;
+}
+.scan-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--primary-rgb), 0) 0%,
+    rgba(var(--primary-rgb), 0.15) 85%,
+    rgba(var(--primary-rgb), 0.4) 95%,
+    rgba(var(--primary-rgb), 0) 100%
+  );
+  animation: radarSweeper 2.5s infinite linear;
+  pointer-events: none;
+  opacity: 0;
+}
+.scan-container.active::after {
+  opacity: 1;
+}
+
+@keyframes radarSweeper {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* CSS Grid dashboard layout rules */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 400px 350px;
+  gap: 15px;
+  padding: 15px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    overflow-y: auto;
+    height: auto;
+  }
+}
